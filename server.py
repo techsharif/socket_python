@@ -32,7 +32,7 @@ while not quitting:
         
 
         a = 0
-        b = 9
+        b = 99999999
         key = random.randint(a, b)
         range_start = random.randint(a, b)
         range_end = random.randint(range_start, b)
