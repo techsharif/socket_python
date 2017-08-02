@@ -3,6 +3,7 @@ import socket
 import threading
 import time
 import hashlib
+import json
 
 tLock = threading.Lock()
 shutdown = False
@@ -36,16 +37,17 @@ s.setblocking(0)
 rT = threading.Thread(target=receving, args=("RecvThread",s))
 rT.start()
 
-alias = input("Name: ")
+alias = raw_input("Name: ")
 message = ''
 while message=='':
-    message = input(alias + "-> ")
+    message = raw_input(alias + "-> ")
 t = message
+start_time = time.time()
 mt = ''
 key = ''
 while key == '':
     s.sendto(alias + ": " + message, server)
-    print( res)
+    print res
     if res[0]:
         data = res[1]
         if len(data.split(':')) == 2:
@@ -55,10 +57,24 @@ while key == '':
                 m = hashlib.md5()
                 m.update(str(t)+str(k))
                 if str(m.hexdigest()) == mt:
-                    print( '-----------------------------------')
-                    print( 'Key: ' + str(k))
-                    print( '-----------------------------------')
+                    print '-----------------------------------'
+                    print 'Key: ' + str(k)
+                    print '-----------------------------------'
                     key = str(k)
+                    f = open(alias+'.txt', 'w')
+                    end_time = time.time()
+                    dt = {
+                        'name': alias,
+                        'text':t,
+                        'md5':mt,
+                        'key':str(k),
+                        'time_start': start_time,
+                        'time_end': end_time,
+                        'time_elapsed':end_time-start_time
+                    }
+                    f.write(json.dumps(dt))
+
+                    f.close()
                     break
             if key !='': break
         elif len(data.split(':')) == 4: 
@@ -66,20 +82,33 @@ while key == '':
             mt = d[1]
             st = int(d[2])
             e = int(d[3])
-            print((mt))
+            print(mt)
             for k in range(st,e+1):
                 m = hashlib.md5()
                 m.update(str(t)+str(k))
                 if str(m.hexdigest()) == mt:
-                    print( '-----------------------------------')
-                    print( 'Key: ' + str(k))
-                    print( '-----------------------------------')
+                    print '-----------------------------------'
+                    print 'Key: ' + str(k)
+                    print '-----------------------------------'
                     key = str(k)
+                    f = open(alias+'.txt', 'w')
+                    end_time = time.time()
+                    dt = {
+                        'name': alias,
+                        'text':t,
+                        'md5':mt,
+                        'key':str(k),
+                        'time_start': start_time,
+                        'time_end': end_time,
+                        'time_elapsed':end_time-start_time
+                    }
+                    f.write(json.dumps(dt))
+                    f.close()
                     break
             if key !='': break
             
-        print( 'not found in range - ' + res[1])
-        print( 'resend')
+        print 'not found in range - ' + res[1]
+        print 'resend'
     message = 'resend'
     time.sleep(0.1)
 
