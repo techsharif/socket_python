@@ -27,6 +27,7 @@ def receving(name, sock):
 
 host = '127.0.0.1'
 port = 0
+rn = 0
 
 server = ('127.0.0.1',5001)
 
@@ -109,7 +110,8 @@ while key == '':
             
         print 'not found in range - ' + res[1]
         print 'resend'
-    message = 'resend'
+    message = 'resend'+str(rn%5)
+    rn+=1
     time.sleep(0.1)
 
 shudown = True

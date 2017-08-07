@@ -37,9 +37,21 @@ while not quitting:
         range_start = random.randint(a, b)
         range_end = random.randint(range_start, b)
         
-        if data=='resend':
+        if data=='resend0':
             # print str(range_start)+':'+str(range_end)
-            s.sendto(str(range_start)+':'+str(range_end), client)
+            s.sendto(str(int(a))+':'+str(int(b/4)+1), client)
+        elif data=='resend1':
+            # print str(range_start)+':'+str(range_end)
+            s.sendto(str(int(b/4)-1)+':'+str(int(b/2)+1), client)
+        elif data=='resend2':
+            # print str(range_start)+':'+str(range_end)
+            s.sendto(str(int(b/2)-1)+':'+str(int(b*3/4)+1), client)
+        elif data=='resend3':
+            # print str(range_start)+':'+str(range_end)
+            s.sendto(str(int(b*3/4)-1)+':'+str(int(b)), client)
+        elif data=='resend4':
+            # print str(range_start)+':'+str(range_end)
+            s.sendto(str(a)+':'+str(b), client)
         else: 
             m = hashlib.md5()
             m.update(str(data)+str(key))
